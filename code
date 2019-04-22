@@ -1,0 +1,81 @@
+var velocity = 1; 
+var baseNote = 57.5;
+var keyStates = [0,0,0,0];
+
+
+function setup() {
+  createCanvas(720, 400);
+  noStroke();
+  background(230);
+  rectWidth = width / 4;
+
+  synth = new p5.PolySynth();
+}
+
+function draw() {
+ 
+}
+
+//color//
+function draw() {
+ 
+    // randFill_r = Math.floor(Math.random() * 25 + 1);
+    // randFill_g = Math.floor(Math.random() * 223 + 1);
+    // randFill_b = Math.floor(Math.random() * 215 + 1);
+    // fill(randFill_r, randFill_g, randFill_b);
+    // let x = map(keyIndex, 0, 25, 0, width);
+    // ellipse(x, random(500), random(500), random(500), 50);
+
+ for (var x = 10; x < width-10; x = x + 10) {
+    line(x, height/2, mouseX, mouseY,stroke(random(10,290),110,123));
+  }
+}
+
+
+//sound
+function keyPressed1() {
+  let KeyStates = -10;
+  if (key >= 'as' && key <= 'z') {
+    keyIndex = key.charCodeAt(0) - 'a'.charCodeAt(0);
+  }
+  if (keyIndex === -1) ;
+    //  synth
+    var midiNoteNumber = baseNote + keyIndex; 
+    var freq = midiToFreq(midiNoteNumber);
+    synth.noteAttack(freq, velocity, 50);
+  
+  
+}
+
+function keyReleased() {
+  var keyIndex = keyOrder.indexOf(key);
+  
+  if (keyIndex >= 0) {
+    
+    keyStates[keyIndex] = 0;
+    
+ var midiNoteNumber = baseNote + keyIndex; 
+ var freq = midiToFreq(midiNoteNumber);
+    synth.noteRelease(freq, 0);
+  }
+  
+}
+
+function touchStarted() {
+  var keyWidth = keyStates.length;
+  var keyIndex = floor(mouseX / mouseY);
+  keyStates[keyIndex] = 100;
+  
+  
+  
+var midiNoteNumber = baseNote + keyIndex; 
+  var freq = midiToFreq(midiNoteNumber);
+  synth.noteAttack(freq, velocity, 0);
+}
+
+function touchEnded() {
+  for (var i = 0; i < keyStates.length; i++) {
+    keyStates[i] = 0;
+  }
+ 
+}
